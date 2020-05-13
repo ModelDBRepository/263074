@@ -1,0 +1,143 @@
+<html>
+
+<head>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript" src="iid_ep2_plot_corrected.mjs"></script>
+  <script type="text/javascript">
+  height_plots=250; 
+  width_plot=1100;
+  lngth=60000;
+  ii_start=0;
+  ii_end=lngth;
+  //***********************  
+  arbig = Epileptor(lngth);
+  //***********************
+  
+  var KK =[]; var NNa =[]; var xx =[]; var VV =[]; var UU =[]; 
+  var time =[]; var vv =[]; var II =[]; var uu =[];
+  var ii;
+  for (ii=0; ii<=lngth; ii++){
+  KK[ii] = arbig[ii][1];
+  NNa[ii] = arbig[ii][2];
+  xx[ii] = arbig[ii][3]; 
+  VV[ii] = arbig[ii][4]; 
+  UU[ii] = arbig[ii][5]; 
+  time[ii] = arbig[ii][6]; 
+  vv[ii] = arbig[ii][7]; 
+  II[ii] = arbig[ii][8]; 
+  uu[ii] = arbig[ii][9];
+  }
+  // Load the Visualization API and the corechart package.
+  google.charts.load('current', { 'packages': ['corechart'] });
+  // Set a callback to run when the Google Visualization API is loaded.
+  google.charts.setOnLoadCallback(drawChart);
+
+    //********************************************************************************
+    function drawChart() {
+      var options = {
+        'title': 'Extracellular Potassium and Intracellular Sodium Ionic Concentrations',
+        'width': width_plot,
+        'height': height_plots,
+         //hAxis: { title: 'Time, s'     },
+         vAxis: { title: 'mM'     }
+         //,colors: ['blue', 'red']
+      };
+      //**********************************************************
+      var options6 = {
+        'title': 'Membrane potential of a single neuron',
+        'width': width_plot,
+        'height': height_plots,
+         //hAxis: { title: 'Time, s'     },
+         vAxis: { title: 'mV'     }
+         //,colors: ['#a52714', '#097138']
+      };
+      var chart6 = new google.visualization.LineChart(document.getElementById('curve_chart6'));
+            
+      var data6 = new google.visualization.DataTable();
+      data6.addColumn('number', 'Time');
+      data6.addColumn('number', 'U');
+      for (ii=ii_start; ii<=ii_end; ii++){
+          data6.addRows([[time[ii], UU[ii]]]);
+        }
+      chart6.draw(data6, options6);      var chart3 = new google.visualization.LineChart(document.getElementById('curve_chart'));
+            
+      var data4 = new google.visualization.DataTable();
+      data4.addColumn('number', 'Time');
+      data4.addColumn('number', 'K');
+      data4.addColumn('number', 'Na');
+  
+      for (ii=ii_start; ii<=ii_end; ii++){
+          data4.addRows([[time[ii],  KK[ii],NNa[ii]]]);
+        }
+
+      chart3.draw(data4, options);
+      //**********************************************************
+      var options5 = {
+        'title': 'Synaptic resource',
+        'width': width_plot,
+        'height': height_plots,
+         hAxis: { title: 'Time, s'     },
+         vAxis: { title: 'units'     }
+         ,colors: ['gray','#a52714', '#097138']
+      };
+      var chart5 = new google.visualization.LineChart(document.getElementById('curve_chart5'));
+            
+      var data5 = new google.visualization.DataTable();
+      data5.addColumn('number', 'Time');
+      data5.addColumn('number', 'xD');
+      for (ii=ii_start; ii<=ii_end; ii++){
+          data5.addRows([[time[ii], xx[ii]]]);
+        }
+      chart5.draw(data5, options5);
+    }
+    //*** End of drawChart() *****************************************************************
+    
+    function Zoom(dir) {
+      ii_start=Math.round(ii_start+dir*(ii_end-ii_start)/4);
+      ii_end  =Math.round(ii_end  -dir*(ii_end-ii_start)/4);
+      if (ii_end>lngth) {ii_end=lngth};
+      drawChart();
+    }
+
+    function Recalculate(){
+    arbig = Epileptor(lngth);
+    var ii;
+    for (ii=0; ii<=lngth; ii++){
+      KK[ii] = arbig[ii][1];
+      NNa[ii] = arbig[ii][2];
+      xx[ii] = arbig[ii][3]; 
+      VV[ii] = arbig[ii][4]; 
+      UU[ii] = arbig[ii][5]; 
+      time[ii] = arbig[ii][6]; 
+      vv[ii] = arbig[ii][7]; 
+      II[ii] = arbig[ii][8]; 
+      uu[ii] = arbig[ii][9];
+    }
+  }
+
+  </script>
+</head>
+
+<body style="background-color:#E4FDE8;">
+<h1>Epileptor-2</h1>
+<h3>
+<li class=MsoNormal style='mso-list:l1 level1 lfo3;tab-stops:list 36.0pt'><span
+     lang=EN-US style='mso-ansi-language:EN-US'>Epileptor-2 is a minimal biophysically meaningful model of ictal and interictal discharges [<a
+     href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1006186">A.V. Chizhov et al. // PloS CB 2018</a></span><o:p></o:p></span>]. 
+      <o:p></o:p></span></li>
+</h3>
+
+  <!--Div that will hold the pie chart-->
+  <div id="curve_chart6" style="width: width_plot; height: height_plots"></div>
+  <div id="curve_chart" style="width: width_plot; height: height_plots"></div>
+  <div id="curve_chart5" style="width: width_plot; height: height_plots"></div>
+
+  <!-- Buttons -->
+  <input type="button" value="Zoom in " onclick="Zoom(1)" />
+  <input type="button" value="Zoom out" onclick="Zoom(-1)" />
+<h3>Please, wait. It takes about 1 min on a mobile device.</h2>
+<h3>Refresh the page to get another solution.</h2>
+
+</body>
+
+</html>
