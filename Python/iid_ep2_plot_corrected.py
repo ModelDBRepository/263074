@@ -6,8 +6,9 @@
 Сей лес, столь дикий, столь густой и лютый,
 Что в мыслях он мой страх возобновил.
 """
-import pylab as pl
+
 import numpy as np
+import pylab as pl
 
 
 def VK(Kconc):
@@ -151,12 +152,12 @@ pl.subplot(422)
 pl.plot(xax, UU, 'k')
 pl.ylabel(r'$U (mV)$')
 
-bgin = int(212. / dt)
-endd = int(223. / dt)
+bgin = int(150. / dt)
+endd = int(220. / dt)
 axx = pl.subplot(424)
 pl.plot(xax[bgin:endd], UU[bgin:endd], 'k')
 pl.ylabel(r'$U (mV)$')
-pl.xlim(bgin - 1, endd + 1)
+# pl.xlim(bgin - 1, endd + 1)
 
 ax1 = pl.subplot(426, sharex=axx)
 pl.plot(xax[bgin:endd], KK[bgin:endd], label='K')
@@ -169,7 +170,7 @@ pl.plot(xax[bgin:endd], II[bgin:endd], \
         color=np.array([210, 105, 30]) / 255., label='Ip')
 # pl.legend(frameon=False, loc='best')
 pl.ylabel(r'$I_{pump}$ $(mM/s)$')
-pl.ylim(0.01, 0.1)
+pl.ylim(0, 0.1)
 
 pl.subplot(428, sharex=ax)
 pl.plot(xax, uu)
